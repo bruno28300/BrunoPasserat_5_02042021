@@ -1,0 +1,14 @@
+$size: 4rem;
+$font-size: 4rem;
+$font-weight: 400;
+
+$color-primary: #9356dc;
+$color-secondary: #ff79da;
+$color-tertiary: #f3e9f1;
+$color-white: #fff;
+
+$box-shadow: $size/2 $size/2 $size/2 darken($color-white, 10);
+
+$shadow-size: 0.55rem;
+$layout-margin: 7rem;
+$grid-gutter: $layout-margin * 0.25;

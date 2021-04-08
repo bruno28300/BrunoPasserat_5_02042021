@@ -1,0 +1,9 @@
+.footer {
+  background: $color-tertiary;
+  & .row {
+    align-items: center;
+  }
+  & p {
+    margin-bottom: 0;
+  }
+}
