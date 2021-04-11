@@ -2,16 +2,21 @@ document.addEventListener("DOMContentLoaded", function () {
     var products = new XMLHttpRequest();
     products.onreadystatechange = function () {
         if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-            var response = JSON.parse(this.responseText);
-            var id = response._id;
-            var name = response.name;
-            var price = response.price;
-            var description = response.description;
-            var imageUrl = response.imageUrl;
-            var varnish = response.varnish;
-            const varnishes = response.varnish;
-            console.table(varnishes);
 
+            /* Récupération des éléments de l'API */
+            let response = JSON.parse(this.responseText);
+            const {
+                _id,
+                name,
+                price,
+                description,
+                imageUrl,
+                varnish
+            } = response;
+
+            const varnishSelection = document.getElementById('varnishSelection');
+
+            /* Saisie des éléments du produit */
             document.getElementsByTagName("h2")[0].innerHTML = "Orinoco - " + name;
             document.getElementsByClassName("card-title")[0].innerHTML = name;
             document.getElementsByClassName("card-text")[0].innerHTML = description;
@@ -21,29 +26,25 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementsByClassName("card-img-top")[0].src = imageUrl;
             document.getElementsByClassName("card-img-top")[0].alt = name;
 
-            for (i = 0; i < varnish.length; i++) {
-                var option = document.createElement("button");
-                option.innerHTML = varnish[i];
-                document.getElementsByClassName("dropdown-menu")[0].appendChild(option);
-            }
-            for (i = 0; i <= varnish.length; i++) {
-                document.getElementsByTagName("button")[i].setAttribute("id", "option" + [i]);
-                document.getElementsByTagName("button")[i].setAttribute("class", "dropdown-item");
+            /* Choix du vernis */
+            let i = 1;
+            varnish.forEach(function (item) {
+                let option = document.createElement("option");
+                varnishSelection.appendChild(option);
+                option.innerHTML = item;
+                option.value = "varnish" + i;
+                i++;
+            });
 
-                const optionContentText = document.getElementById("option" + [i]).textContent;
-                console.log(optionContentText);
+            // Quand un vernis est sélectionné
+            varnishSelection.addEventListener('change', function () {
+                let a = document.getElementById("cartPlus");
+                let z = varnishSelection.value
+                console.log(z);
+                /* Sauvegarde dans localStorage */
+                a.href = "./panier.html?id=" + _id + "&varnish=" + z;
+            })
 
-                document.getElementById("option" + [i]).addEventListener("click", function () {
-                    localStorage.setItem("id", id);
-                    localStorage.setItem("varnish2", optionContentText);
-                    let choix = "Choix : " + localStorage.getItem("varnish2");
-                    console.log(id);
-                    console.log(choix);
-                    var a = document.getElementById("cartPlus");
-                    a.href = "./panier.html?id=" + id + ", varnish=" + varnish;
-                });
-
-            }
         }
     };
 
@@ -53,5 +54,4 @@ document.addEventListener("DOMContentLoaded", function () {
     products.open("GET", "http://localhost:3000/api/furniture/" + id);
     products.send();
 
-    console.log("par là : " + localStorage.getItem("varnish2"));
 });
