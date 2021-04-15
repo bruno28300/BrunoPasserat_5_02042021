@@ -13,10 +13,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 imageUrl,
                 varnish
             } = response;
-
             const varnishSelection = document.getElementById('varnishSelection');
 
-            /* Saisie des éléments du produit */
+            /* Affichage des éléments du produit */
             document.getElementsByTagName("h2")[0].innerHTML = "Orinoco - " + name;
             document.getElementsByClassName("card-title")[0].innerHTML = name;
             document.getElementsByClassName("card-text")[0].innerHTML = description;
@@ -36,18 +35,23 @@ document.addEventListener("DOMContentLoaded", function () {
                 i++;
             });
 
-            // Quand un vernis est sélectionné
+            // Quand un vernis est sélectionné 
             varnishSelection.addEventListener('change', function () {
-                let a = document.getElementById("cartPlus");
-                let z = varnishSelection.value
-                console.log(z);
+                let x = document.getElementById("cartPlus");
+                let y = varnishSelection.value
+                console.log(y);
                 /* Sauvegarde dans localStorage */
-                a.href = "./panier.html?id=" + _id + "&varnish=" + z;
+                localStorage.setItem("id", _id);
+                localStorage.setItem("varnishOption", y);
+                x.addEventListener("click", function () {
+                    alert("Votre produit a bien été rajouté au panier");
+                    x.href = "./panier.html?id=" + _id + "&varnishOption=" + y;
+                })
             })
-
         }
     };
 
+    /* Connexion à l'API */
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     id = urlParams.get("id");
