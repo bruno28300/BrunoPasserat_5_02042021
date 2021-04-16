@@ -27,47 +27,41 @@ document.addEventListener('DOMContentLoaded', function () {
                     break;
             }
 
+
             function addArticle() {
 
-                // creating all cells
-                for (let i = 0; i < 5; i++) {
-
-                    // creates a table row
+                    // create a table row
                     let tr = document.createElement("tr");
-                    console.log(tr);
-                    for (let j = 0; j < 4; j++) {
+
                         // Create <td> elements with class names 
-                        let td = document.createElement("td");
-                        tr.appendChild(td);
-                        let qte = 1;
+                        let tdArticle = document.createElement("td");
+                        let tdVernis = document.createElement("td");
+                        let tdQuantite = document.createElement("td");
+                        let tdPrix = document.createElement("td");
+                       
+                        tr.appendChild(tdArticle);
+                        tr.appendChild(tdVernis);
+                        tr.appendChild(tdQuantite);
+                        tr.appendChild(tdPrix);
+                        tdArticle.classList.add("article");
+                        tdVernis.classList.add("varnish");
+                        tdQuantite.classList.add("qte");
+                        tdPrix.classList.add("price");
+                        console.log(tdArticle);
+                        console.log(tdVernis);
+                        console.log(tdQuantite);
+                        console.log(tdPrix);  let qte = 1;
                         document.getElementsByClassName("article")[0].innerHTML = name;
                         document.getElementsByClassName("varnish")[0].innerHTML = choice;
                         document.getElementsByClassName("qte")[0].innerHTML = qte;
                         document.getElementsByClassName("price")[0].innerHTML = (price * qte) / 100 + " €";
                         document.getElementById("totalCart").innerHTML = (price * qte) / 100 + " €";
-                    }
 
                     // Add row to table body
                     document.getElementsByTagName("tbody")[0].appendChild(tr);
-                }
             }
 
             addArticle();
-
-            function addArticle2() {
-
-                    // creating a new tr 
-                    var tr = document.createElement("tr");
-            
-                    // adding the created elements to a object with a class name
-                    document.getElementsByTagName("tbody")[0].appendChild(tr);
-                    tr.appendChild(document.createElement("td")).classList.add("col-md-4");
-                    tr.appendChild(document.createElement("td")).classList.add("col-md-4");
-                    tr.appendChild(document.createElement("td")).classList.add("col-md-2");
-                    tr.appendChild(document.createElement("td")).classList.add("col-md-2");
-            }
-            
-            addArticle2()
         }
     };
 
