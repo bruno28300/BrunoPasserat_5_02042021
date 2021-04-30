@@ -1,3 +1,7 @@
-.price span {
-  
+.card {
+    max-width: $size*6;
+    margin-bottom: $size;
+    &-title {
+        min-height: $size;
+    }
 }

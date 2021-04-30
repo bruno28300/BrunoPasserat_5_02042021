@@ -1,6 +1,6 @@
+let product = new XMLHttpRequest();
 document.addEventListener("DOMContentLoaded", function () {
-    var products = new XMLHttpRequest();
-    products.onreadystatechange = function () {
+    product.onreadystatechange = function () {
         if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
 
             /* Récupération des éléments de l'API */
@@ -51,11 +51,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
-    /* Connexion à l'API */
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    id = urlParams.get("id");
-    products.open("GET", "http://localhost:3000/api/furniture/" + id);
-    products.send();
+    /* Get one product by id */
+    function getProduct() {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        id = urlParams.get("id");
+        product.open("GET", "http://localhost:3000/api/furniture/" + id);
+        product.send();
+    }
 
+    getProduct();
 });

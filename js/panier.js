@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     products.onreadystatechange = function () {
         if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
 
-            /* Récupération des éléments de l'API */
+            /* Get product elements */
             let response = JSON.parse(this.responseText);
             const {
                 name,
@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 varnish
             } = response;
 
-            /* Récupération Choix de vernis */
+            /* Get varnish choice */
             let varnishChoice = localStorage.varnishOption;
             console.log(localStorage.varnishOption);
             let choice = "";
@@ -30,45 +30,48 @@ document.addEventListener('DOMContentLoaded', function () {
 
             function addArticle() {
 
-                    // create a table row
-                    let tr = document.createElement("tr");
+                // create a table row
+                let tr = document.createElement("tr");
 
-                        // Create <td> elements with class names 
-                        let tdArticle = document.createElement("td");
-                        let tdVernis = document.createElement("td");
-                        let tdQuantite = document.createElement("td");
-                        let tdPrix = document.createElement("td");
-                       
-                        tr.appendChild(tdArticle);
-                        tr.appendChild(tdVernis);
-                        tr.appendChild(tdQuantite);
-                        tr.appendChild(tdPrix);
-                        tdArticle.classList.add("article");
-                        tdVernis.classList.add("varnish");
-                        tdQuantite.classList.add("qte");
-                        tdPrix.classList.add("price");
-                        console.log(tdArticle);
-                        console.log(tdVernis);
-                        console.log(tdQuantite);
-                        console.log(tdPrix);  let qte = 1;
-                        document.getElementsByClassName("article")[0].innerHTML = name;
-                        document.getElementsByClassName("varnish")[0].innerHTML = choice;
-                        document.getElementsByClassName("qte")[0].innerHTML = qte;
-                        document.getElementsByClassName("price")[0].innerHTML = (price * qte) / 100 + " €";
-                        document.getElementById("totalCart").innerHTML = (price * qte) / 100 + " €";
+                // Create <td> elements with class names 
+                let tdArticle = document.createElement("td");
+                let tdVernis = document.createElement("td");
+                let tdQuantite = document.createElement("td");
+                let tdPrix = document.createElement("td");
 
-                    // Add row to table body
-                    document.getElementsByTagName("tbody")[0].appendChild(tr);
+                tr.appendChild(tdArticle);
+                tr.appendChild(tdVernis);
+                tr.appendChild(tdQuantite);
+                tr.appendChild(tdPrix);
+                tdArticle.classList.add("article");
+                tdVernis.classList.add("varnish");
+                tdQuantite.classList.add("qte");
+                tdPrix.classList.add("price");
+
+                // Add row to table body
+                document.getElementsByTagName("tbody")[0].appendChild(tr);
+                let qte = 1;
+                tdArticle.innerHTML = name;
+                tdVernis.innerHTML = choice;
+                tdQuantite.innerHTML = qte;
+                tdPrix.innerHTML = (price * qte) / 100 + " €";
+                document.getElementById("totalCart").innerHTML = (price * qte) / 100 + " €";
+
             }
 
             addArticle();
         }
     };
 
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    id = urlParams.get("id");
-    varnish = urlParams.get("option");
-    products.open("GET", "http://localhost:3000/api/furniture/" + id);
-    products.send();
+    /* Get product by id + varnish option */
+    function getProductAddedToCart() {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        id = urlParams.get("id");
+        varnish = urlParams.get("option");
+        products.open("GET", "http://localhost:3000/api/furniture/" + id);
+        products.send();
+    }
+
+    getProductAddedToCart();
 });

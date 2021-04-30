@@ -1,33 +1,84 @@
-document.addEventListener('DOMContentLoaded', function () {
-    var products = new XMLHttpRequest();
-    products.onreadystatechange = function () {
-        if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+// Get all products
 
-            /* Récupération des éléments de l'API */
-            let response = JSON.parse(this.responseText);
-            let i;
-            for (i = 0; i < response.length; i++) {
-                const {
-                    _id,
-                    name,
-                    price,
-                    description,
-                    imageUrl
-                } = response[i];
+function getProducts() {
+    let request = new XMLHttpRequest();
+    let url = "http://localhost:3000/api/furniture";
 
-                /* Affichage des éléments des produits */
-                document.getElementsByClassName("card-title")[i].innerHTML = name;
-                document.getElementsByClassName("card-text")[i].innerHTML = description;
-                document.getElementsByClassName("price")[i].innerHTML = "Prix : <span class='text-danger font-weight-bold'>" +
-                    price / 100 + " €</span>";
-                document.getElementsByClassName("card-img-top")[i].innerHTML = "<img src=" +
-                    imageUrl + " alt=" + name + ">";
-                document.getElementsByClassName("view-product")[i].href = "./produit.html?id=" + _id;
-            }
+    request.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            let request = JSON.parse(this.responseText);
+            Products(request);
         }
     };
+    request.open("GET", url);
+    request.send();
+}
 
-    /* Connexion à l'API */
-    products.open("GET", "http://localhost:3000/api/furniture");
-    products.send();
-});
+getProducts();
+
+// Display products
+
+function Products(arr) {
+    for (let i = 0; i < arr.length; i++) {
+        essai(arr[i]);
+    }
+}
+
+const productsElement = document.createElement("div");
+productsElement.classList.add("d-flex", "justify-content-around", "flex-wrap");
+
+
+function essai(product) {
+    const {
+        _id,
+        name,
+        price,
+        description,
+        imageUrl
+    } = product;
+
+    // Creation of elements
+    const cardElement = document.createElement("div");
+    const imgElement = document.createElement("img");
+    const cardBodyElement = document.createElement("div");
+    const cardTitleElement = document.createElement("h3");
+    const cardTextElement = document.createElement("p");
+    const priceElement = document.createElement("p");
+    const aElement = document.createElement("a");
+
+    const products = document.getElementById("products");
+
+    // Append elements in DOM
+    products.appendChild(productsElement);
+    productsElement.appendChild(cardElement);
+    cardElement.appendChild(imgElement);
+    console.log(cardElement);
+    console.log(imgElement);
+    cardElement.appendChild(cardBodyElement);
+    cardBodyElement.appendChild(cardTitleElement);
+    cardBodyElement.appendChild(cardTextElement);
+    cardBodyElement.appendChild(priceElement);
+    cardBodyElement.appendChild(aElement);
+
+    // Add class properties
+    cardElement.classList.add("card", "shadow");
+    imgElement.classList.add("card-img-top");
+    cardBodyElement.classList.add("card-body");
+    cardTitleElement.classList.add("card-title");
+    cardTextElement.classList.add("card-text");
+    priceElement.classList.add("price");
+    aElement.classList.add("btn", "btn-success", "btn-lg", "view-product", "stretched-link");
+
+    // Add attribute properties
+    imgElement.setAttribute("src", imageUrl);
+    imgElement.setAttribute("alt", name);
+    imgElement.setAttribute("loading", "lazy");
+    aElement.setAttribute("href", "./produit.html?id=" + _id);
+
+    // Creation of content
+    cardTitleElement.innerHTML = name;
+    cardTextElement.innerHTML = description;
+    priceElement.innerHTML = "Prix : <span class='text-danger font-weight-bold'>" +
+        price / 100 + " €</span>";
+    aElement.innerHTML = "Voir le produit";
+}

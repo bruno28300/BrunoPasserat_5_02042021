@@ -25,4 +25,13 @@ body {
 .footer p {
   margin-bottom: 0;
 }
+
+.card {
+  max-width: 24rem;
+  margin-bottom: 4rem;
+}
+
+.card-title {
+  min-height: 4rem;
+}
 /*# sourceMappingURL=main.css.map */
