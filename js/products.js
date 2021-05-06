@@ -1,5 +1,4 @@
 // Get all products
-
 function getProducts() {
     let request = new XMLHttpRequest();
     let url = "http://localhost:3000/api/furniture";
@@ -16,19 +15,18 @@ function getProducts() {
 
 getProducts();
 
-// Display products
-
+// Display products loop
 function Products(arr) {
     for (let i = 0; i < arr.length; i++) {
-        essai(arr[i]);
+        cards(arr[i]);
     }
 }
 
+// Creation cards container
 const productsElement = document.createElement("div");
 productsElement.classList.add("d-flex", "justify-content-around", "flex-wrap");
 
-
-function essai(product) {
+function cards(product) {
     const {
         _id,
         name,
@@ -37,48 +35,49 @@ function essai(product) {
         imageUrl
     } = product;
 
-    // Creation of elements
+    // Creation card element
     const cardElement = document.createElement("div");
+    productsElement.appendChild(cardElement);
+    cardElement.classList.add("card", "shadow");
+
+    // Creation card image
     const imgElement = document.createElement("img");
+    cardElement.appendChild(imgElement);
+    imgElement.classList.add("card-img-top");
+    imgElement.setAttribute("src", imageUrl);
+    imgElement.setAttribute("alt", name);
+    imgElement.setAttribute("loading", "lazy");
+
+    // Creation card body
     const cardBodyElement = document.createElement("div");
     const cardTitleElement = document.createElement("h3");
     const cardTextElement = document.createElement("p");
-    const priceElement = document.createElement("p");
-    const aElement = document.createElement("a");
+    const priceElement = document.createElement("h4");
+    const priceSpanElement = document.createElement("span");
+    cardBodyElement.classList.add("card-body");
+    cardTitleElement.classList.add("card-title");
+    cardTextElement.classList.add("card-text");
+    priceElement.classList.add("text-center", "my-5");
+    priceSpanElement.classList.add("text-danger", "font-weight-bold")
 
-    const products = document.getElementById("products");
+    // Creation view product button
+    const viewButtonElement = document.createElement("a");
+    viewButtonElement.classList.add("btn", "btn-success", "btn-lg", "view-product", "stretched-link", "d-block", "text-center");
+    viewButtonElement.setAttribute("href", "./produit.html?id=" + _id);
+    viewButtonElement.innerHTML = "Voir le produit";
 
     // Append elements in DOM
+    const products = document.getElementById("products");
     products.appendChild(productsElement);
-    productsElement.appendChild(cardElement);
-    cardElement.appendChild(imgElement);
-    console.log(cardElement);
-    console.log(imgElement);
     cardElement.appendChild(cardBodyElement);
     cardBodyElement.appendChild(cardTitleElement);
     cardBodyElement.appendChild(cardTextElement);
     cardBodyElement.appendChild(priceElement);
-    cardBodyElement.appendChild(aElement);
-
-    // Add class properties
-    cardElement.classList.add("card", "shadow");
-    imgElement.classList.add("card-img-top");
-    cardBodyElement.classList.add("card-body");
-    cardTitleElement.classList.add("card-title");
-    cardTextElement.classList.add("card-text");
-    priceElement.classList.add("price");
-    aElement.classList.add("btn", "btn-success", "btn-lg", "view-product", "stretched-link");
-
-    // Add attribute properties
-    imgElement.setAttribute("src", imageUrl);
-    imgElement.setAttribute("alt", name);
-    imgElement.setAttribute("loading", "lazy");
-    aElement.setAttribute("href", "./produit.html?id=" + _id);
+    priceElement.appendChild(priceSpanElement);
+    cardBodyElement.appendChild(viewButtonElement);
 
     // Creation of content
     cardTitleElement.innerHTML = name;
     cardTextElement.innerHTML = description;
-    priceElement.innerHTML = "Prix : <span class='text-danger font-weight-bold'>" +
-        price / 100 + " €</span>";
-    aElement.innerHTML = "Voir le produit";
+    priceSpanElement.innerHTML = price / 100 + " €";
 }
