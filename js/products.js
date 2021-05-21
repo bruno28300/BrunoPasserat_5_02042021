@@ -1,26 +1,27 @@
 // Get all products
-function getProducts() {
+function getProducts(url, callback) {
     let request = new XMLHttpRequest();
-    let url = "http://localhost:3000/api/furniture";
 
     request.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            let request = JSON.parse(this.responseText);
-            Products(request);
+            let data = JSON.parse(this.responseText);
+            callback(data);
+            console.log(data);
         }
     };
     request.open("GET", url);
     request.send();
 }
 
-getProducts();
-
-// Display products loop
-function Products(arr) {
+getProducts("http://localhost:3000/api/furniture", function Products(arr) {
     for (let i = 0; i < arr.length; i++) {
         cards(arr[i]);
     }
-}
+    // arr.forEach(cards => console.log(cards));
+});
+
+// Display products loop
+
 
 // Creation cards container
 const productsElement = document.createElement("div");
@@ -62,7 +63,7 @@ function cards(product) {
 
     // Creation view product button
     const viewButtonElement = document.createElement("a");
-    viewButtonElement.classList.add("btn", "btn-success", "btn-lg", "view-product", "stretched-link", "d-block", "text-center");
+    viewButtonElement.classList.add("btn", "btn-success", "btn-lg", "view-product", "stretched-link", "d-block", "m-auto");
     viewButtonElement.setAttribute("href", "./produit.html?id=" + _id);
     viewButtonElement.innerHTML = "Voir le produit";
 
