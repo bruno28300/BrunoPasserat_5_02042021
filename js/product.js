@@ -1,64 +1,43 @@
-let product = new XMLHttpRequest();
-document.addEventListener("DOMContentLoaded", function () {
-    product.onreadystatechange = function () {
-        if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+// Get product
+function getProduct(url, callback) {
+    let request = new XMLHttpRequest()
 
-            /* Récupération des éléments de l'API */
-            let response = JSON.parse(this.responseText);
-            const {
-                _id,
-                name,
-                price,
-                description,
-                imageUrl,
-                varnish
-            } = response;
-            const varnishSelection = document.getElementById('varnishSelection');
-
-            /* Affichage des éléments du produit */
-            document.getElementsByTagName("h2")[0].innerHTML = "Orinoco - " + name;
-            document.getElementsByClassName("card-title")[0].innerHTML = name;
-            document.getElementsByClassName("card-text")[0].innerHTML = description;
-            document.getElementsByClassName("price")[0].innerHTML = "Prix : <span class='text-danger font-weight-bold'>" +
-                price /
-                100 + " €</span>";
-            document.getElementsByClassName("card-img-top")[0].src = imageUrl;
-            document.getElementsByClassName("card-img-top")[0].alt = name;
-
-            /* Choix du vernis */
-            let i = 1;
-            varnish.forEach(function (item) {
-                let option = document.createElement("option");
-                varnishSelection.appendChild(option);
-                option.innerHTML = item;
-                option.value = "varnish" + i;
-                i++;
-            });
-
-            // Quand un vernis est sélectionné 
-            varnishSelection.addEventListener('change', function () {
-                let x = document.getElementById("cartPlus");
-                let y = varnishSelection.value
-                console.log(y);
-                /* Sauvegarde dans localStorage */
-                localStorage.setItem("id", _id);
-                localStorage.setItem("varnishOption", y);
-                x.addEventListener("click", function () {
-                    alert("Votre produit a bien été rajouté au panier");
-                    x.href = "./panier.html?id=" + _id + "&varnishOption=" + y;
-                })
-            })
+    request.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            let data = JSON.parse(this.responseText)
+            callback(data)
         }
-    };
-
-    /* Get one product by id */
-    function getProduct() {
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        id = urlParams.get("id");
-        product.open("GET", "http://localhost:3000/api/furniture/" + id);
-        product.send();
     }
 
-    getProduct();
-});
+    const queryString = window.location.search
+    const urlParams = new URLSearchParams(queryString)
+    id = urlParams.get("id")
+    console.log(id)
+
+    request.open("GET", url)
+    request.send()
+}
+
+
+getProduct("http://localhost:3000/api/furniture", function Products(card) {
+    cards(card)
+})
+
+// Cards container
+const productsElement = document.createElement("div")
+productsElement.classList.add("d-flex", "justify-content-around", "flex-wrap")
+
+function cards(product) {
+    const {
+        _id,
+        name,
+        price,
+        description,
+        imageUrl
+    } = product
+
+    createCardBody(name, description, price, imageUrl, _id)
+
+    const products = document.getElementById("products")
+    products.appendChild(productsElement)
+}
